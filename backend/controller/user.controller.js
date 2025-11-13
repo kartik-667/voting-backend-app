@@ -81,3 +81,19 @@ export const login=async (req,res)=>{
     
 
 }
+
+export const profile=async (req,res)=>{
+    const userid=req.user
+
+    const userdata=await usermodel.findOne({_id:userid.id}).select("-password")
+
+    if(!userdata || !userid){
+        return res.status(400).json({
+            msg:"user not logged in"
+        })
+    }
+
+    return res.status(200).json({
+        user:userdata
+    })
+}

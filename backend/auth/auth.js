@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 
-const protect=(req,res,next)=>{
+export const protect=(req,res,next)=>{
     const token=req.cookies?.token
 
     if (!token) {
