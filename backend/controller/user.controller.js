@@ -1,4 +1,5 @@
 import usermodel from "../models/user.db.js"
+import { comparePassword } from "../utilities/utility.js"
 
 
 export const signup=async (req,res)=>{
@@ -27,5 +28,39 @@ export const signup=async (req,res)=>{
     }
 
    
+
+}
+
+export const login=async (req,res)=>{
+    const {email,password}=req.body
+
+    try {
+        const user=await usermodel.findOne({email})
+    if(!user){
+        return res.status(200).json({
+            msg:"user not found with email"
+        })
+    }
+
+    //check pass
+    const result=await comparePassword(password,user.password)
+    if(!result) return  res.status(200).json({
+            msg:"incorrect email/password"
+        })
+
+    return res.status(200).json({
+        msg:"login successful",
+        user:user.name,
+        userid:user._id
+    })
+        
+    } catch (error) {
+        console.log(error);
+        
+        
+    }
+
+    
+    
 
 }
