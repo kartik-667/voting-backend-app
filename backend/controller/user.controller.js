@@ -1,6 +1,31 @@
-import express from 'express'
-const userRouter=express.Router()
+import usermodel from "../models/user.db.js"
 
 
+export const signup=async (req,res)=>{
+    const {name,age,email,password,aadhar}=req.body
+    try {
+         const user=await usermodel.findOne({email})
+    if(user){
+        return res.status(200).json({
+            msg:"user already exists"
+        })
+    }
 
-export default userRouter
+    const newuser=await usermodel.create({
+        name,age,email,password,aadhar
+    })
+    if(newuser) return res.status(201).json({
+        msg:"user created",
+        newuser
+
+    })
+        
+    } catch (error) {
+        console.log(error);
+        
+        
+    }
+
+   
+
+}
