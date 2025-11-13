@@ -1,5 +1,5 @@
 import mongoose  from "mongoose";
-
+import { hashPassword } from "../utilities/utility.js"; 
 
 const userSchema=new mongoose.Schema({
     name:{
@@ -36,5 +36,21 @@ const userSchema=new mongoose.Schema({
     },
 
 },{timestamps:true})
+
+userSchema.pre("save",async function(next){
+    if(!this.isModified("password")) return next()
+
+    try {
+        this.password=await hashPassword(this.password)
+
+        next()
+        
+    } catch (error) {
+        console.log(error);
+        next(error)
+        
+        
+    }
+})
 
 const usermodel=mongoose.model("user",userSchema)

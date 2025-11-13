@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import { hashPassword } from "../utilities/utility";
 const candidateSchema=new mongoose.Schema({
     name:{
         type:String,
@@ -39,4 +39,22 @@ const candidateSchema=new mongoose.Schema({
 
 },{timestamps:true})
 
+candidateSchema.pre("save",async function(next){
+    if(!this.isModified("password")){
+        return next()
+    }
+    try {
+        this.password=await hashPassword(this.password)
+        next()
+        
+    } catch (error) {
+        console.log(error);
+        
+        next(error)
+        
+    }
+})
+
 const candidatemodel=mongoose.model("candidate",candidateSchema)
+
+export default candidatemodel
