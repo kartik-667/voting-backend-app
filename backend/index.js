@@ -2,11 +2,13 @@ import express from 'express'
 import dotenv from 'dotenv'
 import userRouter from './routes/user.route.js'
 import { connectDB } from './utilities/utility.js'
+import cookieParser from 'cookie-parser'
 const app=express()
 dotenv.config()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.use(cookieParser())
 
 app.get("/",(req,res)=>{
     return res.status(200).json({

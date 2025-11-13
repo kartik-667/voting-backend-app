@@ -1,5 +1,19 @@
 import bcrypt from 'bcrypt'
 import mongoose, { mongo } from 'mongoose'
+import jwt from 'jsonwebtoken'
+
+
+export const generateToken=(user)=>{
+    const payload={
+        id:user._id
+    }
+    const token=jwt.sign(payload,process.env.JWT_SECRET)
+
+    return token
+
+
+
+}
 
 export async function connectDB(){
     try {
