@@ -1,7 +1,6 @@
 import usermodel from "../models/user.db.js"
 import { comparePassword, generateToken } from "../utilities/utility.js"
 
-import jwt from 'jsonwebtoken'
 
 
 export const signup=async (req,res)=>{
@@ -96,4 +95,31 @@ export const profile=async (req,res)=>{
     return res.status(200).json({
         user:userdata
     })
+}
+
+export const passwordChange=async (req,res)=>{
+    try {
+        const userid=req.user.id
+        const {oldpass,newpass}=req.body
+
+        const user=await usermodel.findOne({_id:userid})
+        if(!user) return res.status(400).json({msg:"user not found"})
+
+        let result=await comparePassword(oldpass,user.password)
+        if(result){
+            user.password=newpass
+            await user.save()
+            return res.status(203).json({msg:"password updated successfully"})
+
+
+        }else{
+            return res.status(400).json({msg:"please enter correct pass"})
+        }
+
+        
+    } catch (error) {
+        console.log("internal server error",error);
+        
+        
+    }
 }
