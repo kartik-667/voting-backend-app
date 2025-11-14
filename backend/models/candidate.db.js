@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { hashPassword } from "../utilities/utility";
+import { hashPassword } from "../utilities/utility.js";
 const candidateSchema=new mongoose.Schema({
     name:{
         type:String,

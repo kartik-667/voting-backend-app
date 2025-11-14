@@ -123,3 +123,22 @@ export const passwordChange=async (req,res)=>{
         
     }
 }
+
+export const logout= (req,res)=>{
+    try {
+        const user=req.cookies?.token
+        if(user){
+
+            
+            res.clearCookie("token",{
+                httpOnly:true
+            })
+            
+        }
+        return res.status(200).json({ msg: "Logged out successfully" });
+        
+    } catch (error) {
+        console.log("internal server error",error);
+        
+    }
+}

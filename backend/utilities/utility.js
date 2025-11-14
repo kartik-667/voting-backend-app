@@ -1,7 +1,30 @@
 import bcrypt from 'bcrypt'
 import mongoose, { mongo } from 'mongoose'
 import jwt from 'jsonwebtoken'
+import usermodel from '../models/user.db.js'
 
+
+
+export const checkAdmin=async (userid)=>{
+    try {
+         
+        const user=await usermodel.findOne({_id:userid})
+        if(!user) return false
+        if(user.role.toLowerCase() !== "admin"){
+             return false
+
+        }
+
+        return true
+        
+        
+    } catch (error) {
+                console.log(error.message);
+
+        
+    }
+
+}
 
 export const generateToken=(user)=>{
     const payload={

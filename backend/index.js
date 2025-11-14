@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import userRouter from './routes/user.route.js'
 import { connectDB } from './utilities/utility.js'
 import cookieParser from 'cookie-parser'
+import candidateRouter from './routes/candidate.route.js'
+import { protect } from './auth/auth.js'
 const app=express()
 dotenv.config()
 
@@ -18,6 +20,7 @@ app.get("/",(req,res)=>{
 })
 
 app.use("/api/user",userRouter)
+app.use("/api/candidate",protect,candidateRouter)
 
 app.listen(process.env.PORT,async ()=>{
     console.log("listening on given port ");
