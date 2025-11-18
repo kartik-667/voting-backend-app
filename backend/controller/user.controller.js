@@ -4,7 +4,7 @@ import { comparePassword, generateToken } from "../utilities/utility.js"
 
 
 export const signup=async (req,res)=>{
-    const {name,age,email,password,aadhar}=req.body
+    const {name,age,email,password,aadhar,role}=req.body
     try {
          const user=await usermodel.findOne({email})
     if(user){
@@ -14,7 +14,7 @@ export const signup=async (req,res)=>{
     }
 
     const newuser=await usermodel.create({
-        name,age,email,password,aadhar
+        name,age,email,password,aadhar,role
     })
 
     
