@@ -164,9 +164,10 @@ export const vote=async (req,res)=>{
                 party.votes.push({user:userid})
                 party.voteCount=party.voteCount+1
                 user.isVoted=true
+                
                 await user.save()
                 await party.save()
-                return res.status(200).json({msg:`${user.name} has casted vote to ${party.name}`,party})
+                return res.status(200).json({msg:`${user.name} has casted vote to ${party.name}`})
 
 
             }

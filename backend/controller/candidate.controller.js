@@ -81,3 +81,22 @@ export const updateCandidate=async (req,res)=>{
         
     }
 }
+
+export const countVotes=async (req,res)=>{
+    try {
+        const data=await candidatemodel.find().sort({voteCount:'desc'})
+        const data2=[]
+        data.forEach(ele => {
+            data2.push({name:ele.name,party:ele.partyname, votecount:ele.voteCount})
+            
+        });
+
+        return res.status(200).json({data:data2})
+
+
+        
+    } catch (error) {
+        console.log("server error",error);
+        
+    }
+}
