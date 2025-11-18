@@ -1,3 +1,4 @@
+import candidatemodel from "../models/candidate.db.js"
 import usermodel from "../models/user.db.js"
 import { comparePassword, generateToken } from "../utilities/utility.js"
 
@@ -139,6 +140,42 @@ export const logout= (req,res)=>{
         
     } catch (error) {
         console.log("internal server error",error);
+        
+    }
+}
+
+export const vote=async (req,res)=>{
+    try {
+        const candidate_id=req.params.candidateid
+        const userid=req.user.id
+
+        const user=await usermodel.findById(userid)
+
+        if(user){
+            if(user.isVoted === true){
+                return res.status(200).json({msg:"user has already voted , cant vote again"})
+            }else{
+                const party=await candidatemodel.findOne({_id :candidate_id})
+                if(!party){
+                     return res.status(400).json({msg:"no party found"})
+
+                }
+
+                party.votes.push({user:userid})
+                party.voteCount=party.voteCount+1
+                user.isVoted=true
+                await user.save()
+                await party.save()
+                return res.status(200).json({msg:`${user.name} has casted vote to ${party.name}`,party})
+
+
+            }
+        }else{
+            return res.status(400).json({msg:"cant find user"})
+        }
+        
+    } catch (error) {
+          console.log("internal server error",error);
         
     }
 }
